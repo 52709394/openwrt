@@ -73,12 +73,10 @@ define Device/tplink_sg2452p-v4
 endef
 TARGET_DEVICES += tplink_sg2452p-v4
 
-define Device/zyxel_gs1900-48-a1
+define Device/zyxel_gs1900-48
   $(Device/zyxel_gs1900)
   SOC := rtl8393
   DEVICE_MODEL := GS1900-48
-  DEVICE_VARIANT := A1
   ZYXEL_VERS := AAHN
-  SUPPORTED_DEVICES += zyxel,gs1900-48
 endef
-TARGET_DEVICES += zyxel_gs1900-48-a1
+TARGET_DEVICES += zyxel_gs1900-48

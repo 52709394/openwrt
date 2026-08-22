@@ -218,10 +218,6 @@
 	nvmem-cell-names = "mac-address";
 };
 
-&wdt {
-	status = "disabled";
-};
-
 &wmac {
 	status = "okay";
 

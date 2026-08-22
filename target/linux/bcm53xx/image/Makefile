@@ -176,22 +176,6 @@ define Device/asus_rt-ac3100
 endef
 TARGET_DEVICES += asus_rt-ac3100
 
-define Device/asus_rt-ac3200
-  $(call Device/asus)
-  DEVICE_MODEL := RT-AC3200
-  DEVICE_PACKAGES := $(BRCMFMAC_43602A1) $(USB3_PACKAGES)
-  ASUS_PRODUCTID := RT-AC3200
-endef
-TARGET_DEVICES += asus_rt-ac3200
-
-define Device/asus_rt-ac5300
-  $(call Device/asus)
-  DEVICE_MODEL := RT-AC5300
-  DEVICE_PACKAGES := $(BRCMFMAC_4366C0) $(USB3_PACKAGES)
-  ASUS_PRODUCTID := RT-AC5300
-endef
-TARGET_DEVICES += asus_rt-ac5300
-
 define Device/asus_rt-ac56u
   $(call Device/asus)
   DEVICE_MODEL := RT-AC56U
@@ -416,7 +400,7 @@ TARGET_DEVICES += meraki_mr26
 define Device/meraki_mr32
   DEVICE_VENDOR := Meraki
   DEVICE_MODEL := MR32
-  DEVICE_PACKAGES := $(B43) kmod-leds-pwm kmod-hwmon-ina2xx kmod-hci-uart
+  DEVICE_PACKAGES := $(B43) kmod-leds-pwm kmod-hwmon-ina2xx kmod-bluetooth
   DEVICE_DTS := bcm53016-meraki-mr32
 # Meraki FW r23 tries to resize the part.safe partition before it will
 # flash the image. This is a bit of a problem, since resizing will fail
@@ -459,13 +443,13 @@ define Device/meraki_mx64
 endef
 TARGET_DEVICES += meraki_mx64
 
-define Device/meraki_mx64-a0
+define Device/meraki_mx64_a0
   $(call Device/meraki_mx64)
   DEVICE_VARIANT := A0
   DEVICE_DTS_CONFIG := config@2
   DEVICE_DTS := bcm958625-meraki-mx64-a0
 endef
-TARGET_DEVICES += meraki_mx64-a0
+TARGET_DEVICES += meraki_mx64_a0
 
 define Device/meraki_mx65
   $(call Device/meraki_mx6x)

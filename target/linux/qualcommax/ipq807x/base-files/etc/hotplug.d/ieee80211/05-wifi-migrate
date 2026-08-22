@@ -5,7 +5,14 @@
 [ "${ACTION}" = "add" ] || return
 
 . /lib/functions.sh
-. /lib/functions/system.sh
+
+check_kernel()
+{
+	local kernel_current=$(uname -r)
+	if [ ${kernel_current//./} -lt "6600" ]; then
+	  return 1
+	fi
+}
 
 do_migrate_radio()
 {
@@ -29,14 +36,11 @@ check_path()
 	config_get path "$config" path
 
 	to=${path/soc\//soc@0\/}
-	to=${to/pci\//pcie\/}
 
 	# Checks if kernel version is less than 6.6.0, if it is and the path is using the new format,
 	# then path should be migrated to the old format. This would allow users on platforms with two partitions,
 	# to test 6.1 and 6.6.
-	[ "$(get_linux_version)" -lt "606000" ] && to=${to/soc@0\//soc\/}
-
-	[ "$(get_linux_version)" -lt "612000" ] && to=${to/pcie\//pci\/}
+	check_kernel || to=${path/soc@0\//soc\/}
 
 	[ "$path" = "$to" ] || do_migrate_radio "$config" "$path" "$to"
 }

@@ -116,11 +116,6 @@
 	nvmem-cell-names = "mac-address";
 };
 
-&ppe {
-	nvmem-cells = <&macaddr_boardconfig_16 2>;
-	nvmem-cell-names = "mac-address";
-};
-
 &gphy0 {
 	lantiq,gphy-mode = <GPHY_MODE_FE>;
 };
@@ -240,7 +235,7 @@
 	status = "okay";
 	reset-gpios = <&gpio 21 GPIO_ACTIVE_LOW>;
 
-	wifi@e,0 {
+	wifi@1814,3592 {
 		compatible = "pci1814,3592";
 		reg = <0x7000 0 0 0 0>;
 		ralink,mtd-eeprom = <&boardconfig 0x410>;

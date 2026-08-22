@@ -224,7 +224,7 @@
 };
 
 &gsw_phy1 {
-	pinctrl-names = "gbe-led";
+	pinctrl-names = "led";
 	pinctrl-0 = <&gswp1_led0_pins>;
 	status = "okay";
 };
@@ -240,7 +240,7 @@
 };
 
 &gsw_phy2 {
-	pinctrl-names = "gbe-led";
+	pinctrl-names = "led";
 	pinctrl-0 = <&gswp2_led0_pins>;
 	status = "okay";
 };
@@ -256,7 +256,7 @@
 };
 
 &gsw_phy3 {
-	pinctrl-names = "gbe-led";
+	pinctrl-names = "led";
 	pinctrl-0 = <&gswp3_led0_pins>;
 	status = "okay";
 };
@@ -272,7 +272,7 @@
 };
 
 &gsw_phy4 {
-	pinctrl-names = "gbe-led";
+	pinctrl-names = "led";
 	pinctrl-0 = <&gswp4_led0_pins>;
 	status = "okay";
 };

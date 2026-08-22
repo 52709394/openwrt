@@ -35,7 +35,7 @@ struct trelay {
 	char name[];
 };
 
-static rx_handler_result_t trelay_handle_frame(struct sk_buff **pskb)
+rx_handler_result_t trelay_handle_frame(struct sk_buff **pskb)
 {
 	struct net_device *dev;
 	struct sk_buff *skb = *pskb;

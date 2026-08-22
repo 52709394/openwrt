@@ -7,6 +7,7 @@
 #include <dt-bindings/leds/common.h>
 #include <dt-bindings/gpio/gpio.h>
 #include "an7581.dtsi"
+#include "an7581-npu-mt7996.dtsi"
 
 / {
 	model = "Airoha AN7581 Evaluation Board";
@@ -25,23 +26,6 @@
 	memory@80000000 {
 		device_type = "memory";
 		reg = <0x0 0x80000000 0x2 0x00000000>;
-	};
-};
-
-&afe {
-	status = "okay";
-};
-
-&sound {
-	audio-routing = "Headphone", "HP_L",
-			"Headphone", "HP_R",
-			"LINPUT1", "AMIC",
-			"RINPUT1", "AMIC";
-
-	status = "okay";
-
-	codec {
-		sound-dai = <&wm8960>;
 	};
 };
 
@@ -177,11 +161,6 @@
 
 &i2c0 {
 	status = "okay";
-
-	wm8960: codec@1a {
-		compatible = "wlf,wm8960";
-		reg = <0x1a>;
-	};
 };
 
 &pcie0 {
@@ -237,8 +216,6 @@
 };
 
 &npu {
-	firmware-name = "airoha/en7581_MT7996_npu_rv32.bin",
-			"airoha/en7581_MT7996_npu_data.bin";
 	status = "okay";
 };
 
@@ -269,7 +246,7 @@
 };
 
 &gsw_phy1 {
-	pinctrl-names = "gbe-led";
+	pinctrl-names = "led";
 	pinctrl-0 = <&gswp1_led0_pins>;
 	status = "okay";
 };
@@ -285,7 +262,7 @@
 };
 
 &gsw_phy2 {
-	pinctrl-names = "gbe-led";
+	pinctrl-names = "led";
 	pinctrl-0 = <&gswp2_led0_pins>;
 	status = "okay";
 };
@@ -301,7 +278,7 @@
 };
 
 &gsw_phy3 {
-	pinctrl-names = "gbe-led";
+	pinctrl-names = "led";
 	pinctrl-0 = <&gswp3_led0_pins>;
 	status = "okay";
 };
@@ -317,7 +294,7 @@
 };
 
 &gsw_phy4 {
-	pinctrl-names = "gbe-led";
+	pinctrl-names = "led";
 	pinctrl-0 = <&gswp4_led0_pins>;
 	status = "okay";
 };

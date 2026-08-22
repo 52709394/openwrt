@@ -10,13 +10,13 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=mac80211
 
-PKG_VERSION:=6.18.26
+PKG_VERSION:=6.12.96
 PKG_RELEASE:=1
 PKG_LICENSE:=GPL-2.0-only
 PKG_LICENSE_FILES:=COPYING
 
 PKG_SOURCE_URL:=https://github.com/openwrt/backports/releases/download/backports-v$(PKG_VERSION)
-PKG_HASH:=2ad578c6cae22f192fefd44e1449725228d4109ee781998b41dcbae872554968
+PKG_HASH:=816882e80cd6eb7f10d2851f634ca7964eb47a62f64eff4bf6f92ffdf8593650
 
 PKG_SOURCE:=backports-$(PKG_VERSION).tar.zst
 PKG_BUILD_DIR:=$(KERNEL_BUILD_DIR)/$(if $(BUILD_VARIANT),$(PKG_NAME)-$(BUILD_VARIANT)/)backports-$(PKG_VERSION)
@@ -95,13 +95,12 @@ include ralink.mk
 include realtek.mk
 
 PKG_CONFIG_DEPENDS += \
-	CONFIG_WIFI_SCRIPTS_UCODE \
 	$(patsubst %,CONFIG_PACKAGE_kmod-%,$(PKG_DRIVERS))
 
 define KernelPackage/cfg80211
   $(call KernelPackage/mac80211/Default)
   TITLE:=cfg80211 - wireless configuration API
-  DEPENDS+= +iw +!WIFI_SCRIPTS_UCODE:iwinfo +wifi-scripts +wireless-regdb +USE_RFKILL:kmod-rfkill
+  DEPENDS+= +iw +iwinfo +wifi-scripts +wireless-regdb +USE_RFKILL:kmod-rfkill
   ABI_VERSION:=$(PKG_VERSION)-$(PKG_RELEASE)
   FILES:= \
 	$(PKG_BUILD_DIR)/compat/compat.ko \
@@ -335,6 +334,7 @@ ifeq ($(strip $(CONFIG_EXTERNAL_KERNEL_TREE)),"")
   ifeq ($(strip $(CONFIG_KERNEL_GIT_CLONE_URI)),"")
     define Build/Configure
 	  cmp $(PKG_BUILD_DIR)/include/linux/ath5k_platform.h $(LINUX_DIR)/include/linux/ath5k_platform.h
+	  cmp $(PKG_BUILD_DIR)/include/linux/rt2x00_platform.h $(LINUX_DIR)/include/linux/rt2x00_platform.h
     endef
   endif
 endif

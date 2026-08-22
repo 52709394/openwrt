@@ -296,12 +296,12 @@
 	};
 
 	usbphy: usbphy {
-		compatible = "ralink,rt3352-usbphy";
+		compatible = "ralink,rt3050-usbphy";
 		#phy-cells = <0>;
 
 		ralink,sysctl = <&sysc>;
-		resets = <&sysc 22>, <&sysc 25>;
-		reset-names = "host", "device";
+		resets = <&sysc 22>;
+		reset-names = "host";
 	};
 
 	ethernet: ethernet@10100000 {
@@ -331,7 +331,7 @@
 	};
 
 	wmac: wmac@10180000 {
-		compatible = "ralink,rt3050-wifi", "ralink,rt2880-wifi";
+		compatible = "ralink,rt3050-wmac", "ralink,rt2880-wmac";
 		reg = <0x10180000 0x40000>;
 
 		clocks = <&sysc 12>;

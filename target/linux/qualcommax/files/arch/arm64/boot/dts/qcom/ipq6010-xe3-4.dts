@@ -3,6 +3,7 @@
 /dts-v1/;
 
 #include "ipq6018.dtsi"
+#include "ipq6018-fixed-smps.dtsi"
 #include "ipq6018-ess.dtsi"
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/input/input.h>
@@ -15,6 +16,7 @@
 
 	aliases {
 		serial0 = &blsp1_uart3;
+		sdhc2 = &sdhc_1;
 		ethernet0 = &dp5;
 		ethernet1 = &dp4;
 		label-mac-device = &dp5;
@@ -48,13 +50,13 @@
 		led_status_white: status-white {
 			color = <LED_COLOR_ID_WHITE>;
 			function = LED_FUNCTION_STATUS;
-			gpios = <&tlmm 56 GPIO_ACTIVE_LOW>;
+			gpio = <&tlmm 56 GPIO_ACTIVE_LOW>;
 		};
 
 		led_status_amber: status-amber {
 			color = <LED_COLOR_ID_AMBER>;
 			function = LED_FUNCTION_STATUS;
-			gpios = <&tlmm 35 GPIO_ACTIVE_LOW>;
+			gpio = <&tlmm 35 GPIO_ACTIVE_LOW>;
 		};
 	};
 
@@ -66,7 +68,7 @@
 
 		startup-delay-us = <200>;
 
-		gpios = <&tlmm 66 GPIO_ACTIVE_HIGH>;
+		gpio = <&tlmm 66 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
 
 		pinctrl-names = "default";
@@ -84,10 +86,6 @@
 	pinctrl-0 = <&i2c_1_pins>;
 	pinctrl-names = "default";
 	status = "okay";
-};
-
-&rpm {
-	status = "disabled";
 };
 
 &tlmm {
@@ -153,10 +151,15 @@
 
 &pcie0 {
 	status = "okay";
-	perst-gpios = <&tlmm 60 GPIO_ACTIVE_LOW>;
+	perst-gpio = <&tlmm 60 GPIO_ACTIVE_LOW>;
 
-	pcie@0 {
-		wifi@0,0 {
+	bridge@0,0 {
+		reg = <0x00000000 0 0 0 0>;
+		#address-cells = <3>;
+		#size-cells = <2>;
+		ranges;
+
+		wifi@1,0 {
 			status = "okay";
 
 			/* ath11k has no DT compatible for PCI cards */
@@ -169,7 +172,7 @@
 	};
 };
 
-&sdhc {
+&sdhc_1 {
 	pinctrl-0 = <&sd_pins>;
 	pinctrl-names = "default";
 	status = "okay";
@@ -260,6 +263,8 @@
 	status = "okay";
 
 	flash@0 {
+		#address-cells = <1>;
+		#size-cells = <1>;
 		reg = <0>;
 		/*
 		 * U-boot looks for "n25q128a11" node,
@@ -348,27 +353,24 @@
 			};
 
 			partition@510000 {
+				compatible = "u-boot,env";
 				label = "0:APPSBLENV";
 				reg = <0x510000 0x10000>;
 
-				nvmem-layout {
-					compatible = "u-boot,env";
+				ethaddr: ethaddr {
+					#nvmem-cell-cells = <0>;
+				};
 
-					ethaddr: ethaddr {
-						#nvmem-cell-cells = <0>;
-					};
+				eth1addr: eth1addr {
+					#nvmem-cell-cells = <0>;
+				};
 
-					eth1addr: eth1addr {
-						#nvmem-cell-cells = <0>;
-					};
+				eth2addr: eth2addr {
+					#nvmem-cell-cells = <0>;
+				};
 
-					eth2addr: eth2addr {
-						#nvmem-cell-cells = <0>;
-					};
-
-					eth5addr: eth5addr {
-						#nvmem-cell-cells = <0>;
-					};
+				eth5addr: eth5addr {
+					#nvmem-cell-cells = <0>;
 				};
 			};
 

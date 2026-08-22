@@ -51,6 +51,7 @@ define Package/libelf
   $(call Package/elfutils/Default)
   DEPENDS:=$(INTL_DEPENDS) +zlib
   TITLE+= (libelf)
+  PROVIDES:=libelf1
 endef
 
 ifeq ($(CONFIG_BUILD_NLS),y)
@@ -85,8 +86,12 @@ CONFIGURE_VARS += \
 TARGET_CFLAGS += \
 	-D_GNU_SOURCE \
 	-Wno-unused-result \
-	-Wno-format-nonliteral \
+	-Wno-format-nonliteral
+
+ifneq ($(CONFIG_GCC_USE_VERSION_11),y)
+TARGET_CFLAGS += \
 	-Wno-error=use-after-free
+endif
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include

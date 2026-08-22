@@ -73,7 +73,3 @@
 		always-running;
 	};
 };
-
-&wdt {
-	status = "disabled";
-};

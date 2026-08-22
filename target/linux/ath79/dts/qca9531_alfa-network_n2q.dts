@@ -16,6 +16,7 @@
 
 	gpio-export-pcf8574 {
 		compatible = "gpio-export";
+		#size-cells = <0>;
 
 		poe-passthrough {
 			gpio-export,name = "poe-passthrough";

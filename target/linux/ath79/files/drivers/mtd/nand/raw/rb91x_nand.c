@@ -335,11 +335,13 @@ static int rb91x_nand_probe(struct platform_device *pdev)
 	return 0;
 }
 
-static void rb91x_nand_remove(struct platform_device *pdev)
+static int rb91x_nand_remove(struct platform_device *pdev)
 {
 	struct rb91x_nand_drvdata *drvdata = platform_get_drvdata(pdev);
 
 	rb91x_nand_release(drvdata);
+
+	return 0;
 }
 
 static const struct of_device_id rb91x_nand_match[] = {
@@ -351,7 +353,7 @@ MODULE_DEVICE_TABLE(of, rb91x_nand_match);
 
 static struct platform_driver rb91x_nand_driver = {
 	.probe	= rb91x_nand_probe,
-	.remove_new	= rb91x_nand_remove,
+	.remove	= rb91x_nand_remove,
 	.driver	= {
 		.name	= "rb91x-nand",
 		.of_match_table = rb91x_nand_match,

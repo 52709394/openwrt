@@ -54,7 +54,7 @@
 	status = "okay";
 };
 
-&mdio_bus0 {
+&mdio {
 	EXTERNAL_PHY(16)
 	EXTERNAL_PHY(17)
 };
