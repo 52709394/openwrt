@@ -54,11 +54,6 @@
 			no-map;
 			reg = <0x0 0x90c00000 0x0 0x6800>;
 		};
-
-		npu_ba: npu-ba@90c06800 {
-			no-map;
-			reg = <0x0 0x90c06800 0x0 0x200000>;
-		};
 	};
 
 	psci {
@@ -711,8 +706,6 @@
 
 			mediatek,pbus-csr = <&pbus_csr 0x0 0x4>;
 
-			airoha,np-scu = <&scuclk>;
-
 			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
 			bus-range = <0x00 0xff>;
 			#interrupt-cells = <1>;
@@ -799,8 +792,6 @@
 
 			mediatek,pbus-csr = <&pbus_csr 0x10 0x14>;
 
-			airoha,np-scu = <&scuclk>;
-
 			interrupts = <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
 			bus-range = <0x00 0xff>;
 			#interrupt-cells = <1>;
@@ -838,9 +829,9 @@
 				     <GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>,
 				     <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>;
 			memory-region = <&npu_binary>, <&npu_pkt>, <&npu_txpkt>,
-					<&npu_txbufid>, <&npu_ba>;
+					<&npu_txbufid>;
 			memory-region-names = "binary", "pkt", "tx-pkt",
-					      "tx-bufid", "ba";
+					      "tx-bufid";
 			status = "disabled";
 		};
 
@@ -981,6 +972,7 @@
 				gsw_phy1: ethernet-phy@9 {
 					compatible = "ethernet-phy-ieee802.3-c22";
 					reg = <9>;
+					interrupts = <1>;
 					phy-mode = "internal";
 					status = "disabled";
 
@@ -1003,6 +995,7 @@
 				gsw_phy2: ethernet-phy@a {
 					compatible = "ethernet-phy-ieee802.3-c22";
 					reg = <10>;
+					interrupts = <2>;
 					phy-mode = "internal";
 					status = "disabled";
 
@@ -1025,6 +1018,7 @@
 				gsw_phy3: ethernet-phy@b {
 					compatible = "ethernet-phy-ieee802.3-c22";
 					reg = <11>;
+					interrupts = <3>;
 					phy-mode = "internal";
 					status = "disabled";
 
@@ -1047,6 +1041,7 @@
 				gsw_phy4: ethernet-phy@c {
 					compatible = "ethernet-phy-ieee802.3-c22";
 					reg = <12>;
+					interrupts = <4>;
 					phy-mode = "internal";
 					status = "disabled";
 

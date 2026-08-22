@@ -31,6 +31,8 @@ alfa-network,ax1800rm|\
 allnet,all0256n-4m|\
 allnet,all0256n-8m|\
 allnet,all5002|\
+huasifei,shf283|\
+jdcloud,re-cp-02|\
 yuncore,ax820)
 	ubootenv_add_uci_config "/dev/mtd1" "0x0" "0x10000" "0x10000"
 	;;
@@ -73,6 +75,7 @@ zte,mf283plus)
 asus,rt-ax53u|\
 asus,rt-ax54|\
 belkin,rt1800|\
+c-life,xg1|\
 elecom,wrc-x1800gs|\
 h3c,tx1800-plus|\
 h3c,tx1801-plus|\
