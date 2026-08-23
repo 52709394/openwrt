@@ -55,7 +55,7 @@ define FeedSourcesAppendAPK
 		echo '%U/targets/%S/kmods/$(LINUX_VERSION)-$(LINUX_RELEASE)-$(LINUX_VERMAGIC)/packages.adb';) \
 	$(foreach feed,$(FEEDS_AVAILABLE), \
 		$(if $(CONFIG_FEED_$(feed)), \
-			$(if $(filter kenzo small,$(feed)),, \
+			$(if $(filter packages luci routing telephony video,$(feed)), \
 				echo '$(if $(filter m,$(CONFIG_FEED_$(feed))),# )%U/packages/%A/$(feed)/packages.adb';))))) \
 ) >> $(1)
 endef
