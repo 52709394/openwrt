@@ -47,6 +47,18 @@ define Build/linksys-addfwhdr
        	;mv "$@.new" "$@"
 endef
 
+define Build/apboot-addfwhdr
+	$(SCRIPT_DIR)/aruba-header.py \
+		$@ $@.new \
+		"$(call toupper,$(LINUX_KARCH)) $(VERSION_DIST) Linux-$(LINUX_VERSION), $(VERSION_NUMBER) $(VERSION_CODE)"\
+		"$(VERSION_NUMBER)" \
+		"$(VERSION_DIST)" \
+		os \
+		"$(word 1,$(1))"
+
+	mv "$@.new" "$@"
+endef
+
 define Device/DniImage
 	KERNEL_SUFFIX := -uImage
 	KERNEL = kernel-bin | append-dtb | uImage none
@@ -100,6 +112,29 @@ define Device/arris_tr4400-v2
 	KERNEL_IN_UBI := 1
 endef
 TARGET_DEVICES += arris_tr4400-v2
+
+define Device/aruba_ap-32x
+	$(call Device/LegacyImage)
+	DEVICE_VENDOR := Aruba
+	DEVICE_MODEL := AP-325
+	DEVICE_ALT0_VENDOR := Aruba
+	DEVICE_ALT0_MODEL := AP-324
+	DEVICE_ALT1_VENDOR := Siemens
+	DEVICE_ALT1_MODEL := Scalance W1750D
+	SOC := qcom-ipq8068
+	PAGESIZE := 2048
+	BLOCKSIZE := 128k
+	KERNEL_SUFFIX := .ari
+	KERNEL = kernel-bin | append-dtb | uImage none | apboot-addfwhdr Octomore
+	KERNEL_LOADADDR = 0x41508000
+	KERNEL_SIZE := 30720k
+	UBOOT_PATH := $$(STAGING_DIR_IMAGE)/aruba_ap-32x-apboot.mbn
+	ARTIFACTS := apboot.mbn
+	ARTIFACT/apboot.mbn := append-uboot
+	DEVICE_PACKAGES := ath10k-firmware-qca99x0-ct kmod-i2c-gpio kmod-tpm-i2c-atmel \
+		apboot-aruba-ipq806x
+endef
+TARGET_DEVICES += aruba_ap-32x
 
 define Device/askey_rt4230w-rev6
 	$(call Device/LegacyImage)
@@ -525,6 +560,24 @@ define Device/qcom_ipq8064-db149
 endef
 TARGET_DEVICES += qcom_ipq8064-db149
 
+define Device/ruijie_rg-mtfi-m520
+	$(Device/dsa-migration)
+	DEVICE_VENDOR := Ruijie
+	DEVICE_MODEL := RG-MTFi-M520
+	SOC := qcom-ipq8064
+	BLOCKSIZE := 64k
+	KERNEL_SIZE := 4096k
+	KERNEL_SUFFIX := -uImage
+	KERNEL = kernel-bin | append-dtb | uImage none | pad-to $$(KERNEL_SIZE)
+	KERNEL_NAME := zImage
+	IMAGES += factory.bin
+	IMAGE/factory.bin := qsdk-ipq-factory-mmc
+	IMAGE/sysupgrade.bin/squashfs := append-rootfs | pad-to $$$$(BLOCKSIZE) | sysupgrade-tar rootfs=$$$$@ | append-metadata
+	DEVICE_PACKAGES := ath10k-firmware-qca988x-ct kmod-hwmon-lm75 kmod-rtc-pcf8563 \
+		kmod-fs-f2fs losetup mkf2fs
+endef
+TARGET_DEVICES += ruijie_rg-mtfi-m520
+
 define Device/tplink_ad7200
 	$(call Device/TpSafeImage)
 	$(Device/dsa-migration)
@@ -590,6 +643,24 @@ define Device/ubnt_unifi-ac-hd
 		append-rootfs | pad-rootfs | check-size | append-metadata
 endef
 TARGET_DEVICES += ubnt_unifi-ac-hd
+
+define Device/xiaomi_mi-router-hd
+	$(call Device/LegacyImage)
+	$(Device/dsa-migration)
+	DEVICE_VENDOR := Xiaomi
+	DEVICE_MODEL := Mi Router HD
+	SOC := qcom-ipq8064
+	BLOCKSIZE := 128k
+	PAGESIZE := 2048
+	KERNEL_SIZE := 4096k
+	IMAGE_SIZE := 86016k
+	UBINIZE_OPTS := -E 5
+	IMAGES := factory.bin sysupgrade.bin
+	IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-ubi | pad-to $$$$(BLOCKSIZE) | check-size
+	DEVICE_PACKAGES := kmod-i2c-gpio kmod-hwmon-emc2305 kmod-hwmon-lm75 kmod-hwmon-drivetemp \
+		ath10k-firmware-qca9984-ct ath10k-firmware-qca99x0-ct
+endef
+TARGET_DEVICES += xiaomi_mi-router-hd
 
 define Device/zyxel_nbg6817
 	$(Device/dsa-migration)

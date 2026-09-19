@@ -26,6 +26,21 @@ platform_do_upgrade() {
 	qcom,ipq8064-ap161)
 		nand_do_upgrade "$1"
 		;;
+	aruba,ap-32x)
+		# The bootloader on this device unfortunately enforces a particular set of UBI volumes,
+		# and will mess with the partitioning if it doesn't find it.
+		# Therefore, we have to make do with the stock layout, which is a set of three
+		# MTD partitions, each containing a single UBI volume with the same name.
+		# Luckily, it doesn't check size, so we can have a "rootfs_data" volume next to a dummy
+		# "ubifs" volume on the "ubifs" partition.
+		CI_KERNPART="aos0"
+		CI_ROOTPART="aos1"
+		CI_KERN_UBIPART="aos0"
+		CI_ROOT_UBIPART="aos1"
+		CI_DATA_UBIPART="ubifs"
+		CI_SKIP_KERNEL_MTD=1
+		nand_do_upgrade "$1"
+		;;
 	asrock,g10)
 		asrock_upgrade_prepare
 		nand_do_upgrade "$1"
@@ -70,6 +85,9 @@ platform_do_upgrade() {
 		CI_KERNPART="bootkernel2"
 		nand_do_upgrade "$1"
 		;;
+	ruijie,rg-mtfi-m520)
+		ruijie_do_upgrade "$1"
+		;;
 	tplink,ad7200|\
 	tplink,c2600)
 		PART_NAME="os-image:rootfs"
@@ -79,6 +97,9 @@ platform_do_upgrade() {
 	tplink,vr2600v)
 		MTD_CONFIG_ARGS="-s 0x200000"
 		default_do_upgrade "$1"
+		;;
+	xiaomi,mi-router-hd)
+		platform_do_upgrade_xiaomi "$1" 0x2800000
 		;;
 	zyxel,nbg6817)
 		zyxel_do_upgrade "$1"

@@ -135,13 +135,13 @@ DEVICE_VARS += SIGNATURE
 DEVICE_VARS += NETGEAR_BOARD_ID NETGEAR_REGION TPLINK_BOARD
 DEVICE_VARS += LUXUL_BOARD
 
-IEEE8021X := wpad-basic-mbedtls
+IEEE8021X := wpad-openssl
 B43 := $(IEEE8021X) kmod-b43
 BRCMFMAC_43602A1 := $(IEEE8021X) kmod-brcmfmac brcmfmac-firmware-43602a1-pcie
 BRCMFMAC_4366B1 := $(IEEE8021X) kmod-brcmfmac brcmfmac-firmware-4366b1-pcie
 BRCMFMAC_4366C0 := $(IEEE8021X) kmod-brcmfmac brcmfmac-firmware-4366c0-pcie
 USB2_PACKAGES := kmod-usb-ohci kmod-usb2 kmod-phy-bcm-ns-usb2
-USB2_PACKAGES += kmod-usb-ledtrig-usbport
+USB2_PACKAGES += kmod-usb-ledtrig-usbport automount
 USB3_PACKAGES := $(USB2_PACKAGES) kmod-usb3 kmod-phy-bcm-ns-usb3
 
 define Device/Default
@@ -551,7 +551,8 @@ define Device/phicomm_k3
   DEVICE_ALT0_MODEL := QUANTUM DAX
   DEVICE_ALT1_VENDOR := Wavlink
   DEVICE_ALT1_MODEL := WL-WN538A8
-  DEVICE_PACKAGES := $(BRCMFMAC_4366C0) $(USB3_PACKAGES)
+  DEVICE_PACKAGES := $(BRCMFMAC_4366C0) $(USB3_PACKAGES) \
+	-brcmfmac-firmware-4366c0-pcie brcmfmac-firmware-4366c0-pcie-k3
   IMAGES := trx
 endef
 TARGET_DEVICES += phicomm_k3

@@ -130,10 +130,10 @@ set dhcp.odhcpd.loglevel=4
 set dhcp.odhcpd.piodir=/tmp/odhcpd-piodir
 set dhcp.odhcpd.hostsdir=/tmp/hosts
 set dhcp.lan.dhcpv4=$V4MODE
-set dhcp.lan.dhcpv6=$V6MODE
+set dhcp.lan.dhcpv6=disabled
 set dhcp.lan.ra=$V6MODE
 set dhcp.lan.ra_slaac=1
-add_list dhcp.lan.ra_flags=managed-config
-add_list dhcp.lan.ra_flags=other-config
+set dhcp.lan.max_preferred_lifetime=2700
+set dhcp.lan.max_valid_lifetime=5400
 commit dhcp
 EOF

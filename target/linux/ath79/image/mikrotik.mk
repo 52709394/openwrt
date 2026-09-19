@@ -24,7 +24,7 @@ define Device/mikrotik_routerboard-750-r2
   $(Device/mikrotik_nor)
   SOC := qca9533
   DEVICE_MODEL := RouterBOARD 750 r2 (hEX lite)
-  DEVICE_PACKAGES += -kmod-ath9k -wpad-basic-mbedtls
+  DEVICE_PACKAGES += -kmod-ath9k -wpad-openssl
   IMAGE_SIZE := 16256k
   SUPPORTED_DEVICES += rb-750-r2
 endef
@@ -134,7 +134,7 @@ define Device/mikrotik_routerboard-960pgs
   DEVICE_MODEL := RouterBOARD 960PGS (hEX PoE/PowerBox Pro)
   IMAGE_SIZE := 16256k
   DEVICE_PACKAGES += kmod-usb2 kmod-i2c-gpio kmod-sfp kmod-dsa-qca8k -swconfig \
-	-kmod-switch-ar8xxx -iwinfo -kmod-ath9k -wpad-basic-mbedtls
+	-kmod-switch-ar8xxx -iwinfo -kmod-ath9k -wpad-openssl
 endef
 TARGET_DEVICES += mikrotik_routerboard-960pgs
 

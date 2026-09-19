@@ -273,11 +273,12 @@ define Trusted-Firmware-A/mt7981-spim-nand-ubi-ddr4
 endef
 
 define Trusted-Firmware-A/mt7981-cudy-ddr3
-  NAME:=Cudy (SPI-NAND via SPIM, DDR3)
+  NAME:=Cudy (SPI-NAND via SPIM, DDR3 1866 MT/s)
   BOOT_DEVICE:=spim-nand
   BUILD_SUBTARGET:=filogic
   PLAT:=mt7981
   DDR_TYPE:=ddr3
+  DDR3_FREQ_1866:=1
   FIP_OFFSET:=0x3c0000
   FIP_SIZE:=0x200000
 endef
@@ -596,6 +597,17 @@ define Trusted-Firmware-A/mt7988-ram-comb
   DEFAULT:=TARGET_mediatek_filogic
 endef
 
+define Trusted-Firmware-A/mt7988-ram-ddr3
+  NAME:=MediaTek MT7988 (RAM/ddr3)
+  BOOT_DEVICE:=ram
+  BUILD_SUBTARGET:=filogic
+  PLAT:=mt7988
+  RAM_BOOT_UART_DL:=1
+  HIDDEN:=
+  DEFAULT:=TARGET_mediatek_filogic
+  DDR_TYPE:=ddr3
+endef
+
 define Trusted-Firmware-A/mt7988-ram-ddr4
   NAME:=MediaTek MT7988 (RAM/ddr4)
   BOOT_DEVICE:=ram
@@ -740,6 +752,7 @@ TFA_TARGETS:= \
 	mt7988-snand-ddr4 \
 	mt7988-spim-nand-ddr4 \
 	mt7988-ram-comb \
+	mt7988-ram-ddr3 \
 	mt7988-ram-ddr4 \
 	mt7988-emmc-comb \
 	mt7988-nor-comb \
@@ -782,6 +795,7 @@ Package/trusted-firmware-a-mt7986-ram-ddr3/install = $(Package/trusted-firmware-
 Package/trusted-firmware-a-mt7986-ram-ddr4/install = $(Package/trusted-firmware-a-ram/install)
 Package/trusted-firmware-a-mt7987-ram-comb/install = $(Package/trusted-firmware-a-ram/install)
 Package/trusted-firmware-a-mt7988-ram-comb/install = $(Package/trusted-firmware-a-ram/install)
+Package/trusted-firmware-a-mt7988-ram-ddr3/install = $(Package/trusted-firmware-a-ram/install)
 Package/trusted-firmware-a-mt7988-ram-ddr4/install = $(Package/trusted-firmware-a-ram/install)
 
 define Package/trusted-firmware-a/install

@@ -288,7 +288,7 @@ define Device/alfa-network_quad-e4g
   DEVICE_VENDOR := ALFA Network
   DEVICE_MODEL := Quad-E4G
   DEVICE_PACKAGES := kmod-ata-ahci kmod-mmc-mtk kmod-usb3 \
-	-wpad-basic-mbedtls
+	-wpad-openssl
   SUPPORTED_DEVICES += quad-e4g
 endef
 TARGET_DEVICES += alfa-network_quad-e4g
@@ -363,7 +363,7 @@ define Device/asiarf_ap7621-001
   DEVICE_VENDOR := AsiaRF
   DEVICE_MODEL := AP7621-001
   DEVICE_PACKAGES := kmod-mmc-mtk kmod-mt76x2 kmod-usb3 \
-	-wpad-basic-mbedtls -uboot-envtools
+	-wpad-openssl -uboot-envtools
 endef
 TARGET_DEVICES += asiarf_ap7621-001
 
@@ -385,7 +385,7 @@ define Device/asiarf_ap7621-nv1
   DEVICE_VENDOR := AsiaRF
   DEVICE_MODEL := AP7621-NV1
   DEVICE_PACKAGES := kmod-mmc-mtk kmod-mt76x2 kmod-usb3 \
-	-wpad-basic-mbedtls -uboot-envtools
+	-wpad-openssl -uboot-envtools
 endef
 TARGET_DEVICES += asiarf_ap7621-nv1
 
@@ -527,7 +527,7 @@ define Device/beeline_smartbox-flash
 	uImage none
   IMAGES += factory.trx
   IMAGE/factory.trx := append-kernel | append-ubi | check-size
-  DEVICE_PACKAGES := kmod-usb3 kmod-mt7615-firmware uencrypt-mbedtls
+  DEVICE_PACKAGES := kmod-usb3 kmod-mt7615-firmware uencrypt-openssl
 endef
 TARGET_DEVICES += beeline_smartbox-flash
 
@@ -623,6 +623,7 @@ define Device/buffalo_wsr-2533dhpl
   DEVICE_ALT0_MODEL := WSR-2533DHP
   IMAGE/sysupgrade.bin := trx | pad-rootfs | append-metadata
   DEVICE_PACKAGES := kmod-mt7615-firmware -uboot-envtools
+  DEFAULT := n
 endef
 TARGET_DEVICES += buffalo_wsr-2533dhpl
 
@@ -687,6 +688,18 @@ define Device/bolt_arion
 endef
 TARGET_DEVICES += bolt_arion
 
+define Device/c-life_xg1
+  $(Device/nand)
+  DEVICE_VENDOR := C-Life
+  DEVICE_MODEL := XG1
+  DEVICE_PACKAGES := kmod-mt7915-firmware kmod-usb3 kmod-usb-audio
+  IMAGE_SIZE := 254720k
+  IMAGES += factory.bin
+  IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | \
+	check-size
+endef
+TARGET_DEVICES += c-life_xg1
+
 define Device/comfast_cf-e390ax
   $(Device/dsa-migration)
   $(Device/uimage-lzma-loader)
@@ -748,7 +761,7 @@ define Device/cudy_c200p
   DEVICE_MODEL := C200P
   IMAGE_SIZE := 15872k
   UIMAGE_NAME := R74
-  DEVICE_PACKAGES := -uboot-envtools -wpad-basic-mbedtls kmod-usb3
+  DEVICE_PACKAGES := -uboot-envtools -wpad-openssl kmod-usb3
 endef
 TARGET_DEVICES += cudy_c200p
 
@@ -781,7 +794,7 @@ define Device/cudy_r700
   DEVICE_MODEL := R700
   IMAGE_SIZE := 15872k
   UIMAGE_NAME := R29
-  DEVICE_PACKAGES := -uboot-envtools -wpad-basic-mbedtls
+  DEVICE_PACKAGES := -uboot-envtools -wpad-openssl
 endef
 TARGET_DEVICES += cudy_r700
 
@@ -1162,7 +1175,7 @@ define Device/dual-q_h721
   DEVICE_VENDOR := Dual-Q
   DEVICE_MODEL := H721
   DEVICE_PACKAGES := kmod-ata-ahci kmod-mmc-mtk kmod-usb3 \
-	-wpad-basic-mbedtls -uboot-envtools
+	-wpad-openssl -uboot-envtools
 endef
 TARGET_DEVICES += dual-q_h721
 
@@ -1384,6 +1397,7 @@ define Device/elecom_wrc-2533ghbk2-t
 	elx-header 0107003b 8844A2D168B45A2D | \
 	elecom-product-header WRC-2533GHBK2-T
   DEVICE_PACKAGES := kmod-mt7615-firmware -uboot-envtools
+  DEFAULT := n
 endef
 TARGET_DEVICES += elecom_wrc-2533ghbk2-t
 
@@ -1547,6 +1561,7 @@ endif
     sysupgrade-tar kernel=$$$$@ | check-size | append-metadata
   DEVICE_IMG_NAME = $$(DEVICE_IMG_PREFIX)-$$(2)
   DEVICE_PACKAGES := kmod-mt7603 kmod-mt7615-firmware kmod-usb3 kmod-keyboard-sx951x kmod-button-hotplug
+  DEFAULT := n
 endef
 
 define Device/genexis_pulse-ex400
@@ -1573,7 +1588,7 @@ define Device/gnubee_gb-pc1
   DEVICE_VENDOR := GnuBee
   DEVICE_MODEL := GB-PC1
   DEVICE_PACKAGES := kmod-ata-ahci kmod-usb3 kmod-mmc-mtk \
-	-wpad-basic-mbedtls -uboot-envtools
+	-wpad-openssl -uboot-envtools
   IMAGE_SIZE := 32448k
 endef
 TARGET_DEVICES += gnubee_gb-pc1
@@ -1584,7 +1599,7 @@ define Device/gnubee_gb-pc2
   DEVICE_VENDOR := GnuBee
   DEVICE_MODEL := GB-PC2
   DEVICE_PACKAGES := kmod-ata-ahci kmod-usb3 kmod-mmc-mtk \
-	-wpad-basic-mbedtls -uboot-envtools
+	-wpad-openssl -uboot-envtools
   IMAGE_SIZE := 32448k
 endef
 TARGET_DEVICES += gnubee_gb-pc2
@@ -1712,11 +1727,11 @@ define Device/iodata_wn-ax1167gr
   IMAGE_SIZE := 15552k
   DEVICE_VENDOR := I-O DATA
   DEVICE_MODEL := WN-AX1167GR
-ifeq ($(IB),)
-  ARTIFACTS := initramfs-factory.bin
-  ARTIFACT/initramfs-factory.bin := append-image-stage initramfs-kernel.bin | \
-	check-size 7680k | senao-header -r 0x30a -p 0x1055 -t 4
-endif
+# ifeq ($(IB),)
+#   ARTIFACTS := initramfs-factory.bin
+#   ARTIFACT/initramfs-factory.bin := append-image-stage initramfs-kernel.bin | \
+# 	check-size 7680k | senao-header -r 0x30a -p 0x1055 -t 4
+# endif
   DEVICE_PACKAGES := kmod-mt7603 kmod-mt76x2 -uboot-envtools
 endef
 TARGET_DEVICES += iodata_wn-ax1167gr
@@ -1950,7 +1965,7 @@ define Device/iptime_t5004
   UIMAGE_NAME := t5004
   DEVICE_VENDOR := ipTIME
   DEVICE_MODEL := T5004
-  DEVICE_PACKAGES := -wpad-basic-mbedtls
+  DEVICE_PACKAGES := -wpad-openssl
 endef
 TARGET_DEVICES += iptime_t5004
 
@@ -1996,9 +2011,9 @@ TARGET_DEVICES += jcg_y2
 define Device/jdcloud_re-cp-02
   $(Device/dsa-migration)
   IMAGE_SIZE := 16000k
-  DEVICE_VENDOR := JD-Cloud
+  DEVICE_VENDOR := JDCloud
   DEVICE_MODEL := RE-CP-02
-  DEVICE_PACKAGES := kmod-mt7915-firmware kmod-mmc-mtk
+  DEVICE_PACKAGES := kmod-mt7915-firmware kmod-mmc-mtk automount
 endef
 TARGET_DEVICES += jdcloud_re-cp-02
 
@@ -2008,7 +2023,7 @@ define Device/jdcloud_re-sp-01b
   DEVICE_VENDOR := JDCloud
   DEVICE_MODEL := RE-SP-01B
   DEVICE_PACKAGES := kmod-mt7603 kmod-mt7615-firmware \
-	kmod-mmc-mtk kmod-usb3
+	kmod-mmc-mtk kmod-usb3 automount
 endef
 TARGET_DEVICES += jdcloud_re-sp-01b
 
@@ -2020,7 +2035,7 @@ define Device/keenetic_kn-1910
   IMAGE_SIZE := 29097984
   DEVICE_VENDOR := Keenetic
   DEVICE_MODEL := KN-1910
-  DEVICE_PACKAGES := kmod-mt7615-firmware kmod-usb3
+  DEVICE_PACKAGES := kmod-mt7615-firmware kmod-usb3 automount
   IMAGES += factory.bin
   IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | \
 	append-ubi | check-size | zyimage -d 0x801910 -v "KN-1910"
@@ -2189,7 +2204,7 @@ define Device/mediatek_ap-mt7621a-v60
   DEVICE_VENDOR := Mediatek
   DEVICE_MODEL := AP-MT7621A-V60 EVB
   DEVICE_PACKAGES := kmod-usb3 kmod-mmc-mtk kmod-sound-mt7620 \
-	-wpad-basic-mbedtls -uboot-envtools
+	-wpad-openssl -uboot-envtools
 endef
 TARGET_DEVICES += mediatek_ap-mt7621a-v60
 
@@ -2198,7 +2213,8 @@ define Device/mediatek_mt7621-eval-board
   IMAGE_SIZE := 15104k
   DEVICE_VENDOR := MediaTek
   DEVICE_MODEL := MT7621 EVB
-  DEVICE_PACKAGES := -wpad-basic-mbedtls -uboot-envtools
+
+  DEVICE_PACKAGES := -wpad-openssl -uboot-envtools
   SUPPORTED_DEVICES += mt7621
 endef
 TARGET_DEVICES += mediatek_mt7621-eval-board
@@ -2255,7 +2271,7 @@ TARGET_DEVICES += mikrotik_ltap-2hnd
 define Device/mikrotik_routerboard-750gr3
   $(Device/MikroTik)
   DEVICE_MODEL := RouterBOARD 750Gr3
-  DEVICE_PACKAGES += -wpad-basic-mbedtls
+  DEVICE_PACKAGES += -wpad-openssl
   SUPPORTED_DEVICES += mikrotik,rb750gr3
 endef
 TARGET_DEVICES += mikrotik_routerboard-750gr3
@@ -2263,14 +2279,14 @@ TARGET_DEVICES += mikrotik_routerboard-750gr3
 define Device/mikrotik_routerboard-760igs
   $(Device/MikroTik)
   DEVICE_MODEL := RouterBOARD 760iGS
-  DEVICE_PACKAGES += kmod-sfp -wpad-basic-mbedtls
+  DEVICE_PACKAGES += kmod-sfp -wpad-openssl
 endef
 TARGET_DEVICES += mikrotik_routerboard-760igs
 
 define Device/mikrotik_routerboard-m11g
   $(Device/MikroTik)
   DEVICE_MODEL := RouterBOARD M11G
-  DEVICE_PACKAGES := -wpad-basic-mbedtls
+  DEVICE_PACKAGES := -wpad-openssl
   SUPPORTED_DEVICES += mikrotik,rbm11g
 endef
 TARGET_DEVICES += mikrotik_routerboard-m11g
@@ -2278,7 +2294,7 @@ TARGET_DEVICES += mikrotik_routerboard-m11g
 define Device/mikrotik_routerboard-m33g
   $(Device/MikroTik)
   DEVICE_MODEL := RouterBOARD M33G
-  DEVICE_PACKAGES := kmod-usb3 -wpad-basic-mbedtls
+  DEVICE_PACKAGES := kmod-usb3 -wpad-openssl
   SUPPORTED_DEVICES += mikrotik,rbm33g
 endef
 TARGET_DEVICES += mikrotik_routerboard-m33g
@@ -2332,7 +2348,7 @@ define Device/mts_wg430223
 	uImage none
   IMAGES += factory.trx
   IMAGE/factory.trx := append-kernel | append-ubi | check-size
-  DEVICE_PACKAGES := kmod-mt7615-firmware uencrypt-mbedtls
+  DEVICE_PACKAGES := kmod-mt7615-firmware uencrypt-openssl
 endef
 TARGET_DEVICES += mts_wg430223
 
@@ -2657,7 +2673,7 @@ define Device/planex_vr500
   IMAGE_SIZE := 65216k
   DEVICE_VENDOR := Planex
   DEVICE_MODEL := VR500
-  DEVICE_PACKAGES := kmod-usb3 -wpad-basic-mbedtls -uboot-envtools
+  DEVICE_PACKAGES := kmod-usb3 -wpad-openssl -uboot-envtools
   SUPPORTED_DEVICES += vr500
 endef
 TARGET_DEVICES += planex_vr500
@@ -2862,7 +2878,7 @@ define Device/thunder_timecloud
   IMAGE_SIZE := 16064k
   DEVICE_VENDOR := Thunder
   DEVICE_MODEL := Timecloud
-  DEVICE_PACKAGES := kmod-usb3 -wpad-basic-mbedtls -uboot-envtools
+  DEVICE_PACKAGES := kmod-usb3 -wpad-openssl -uboot-envtools
   SUPPORTED_DEVICES += timecloud
 endef
 TARGET_DEVICES += thunder_timecloud
@@ -3037,6 +3053,18 @@ define Device/tplink_ec330-g5u-v1
 endef
 TARGET_DEVICES += tplink_ec330-g5u-v1
 
+define Device/tplink_er605-v1
+  DEVICE_VENDOR := TP-Link
+  DEVICE_MODEL := ER605
+  DEVICE_VARIANT := v1
+  DEVICE_ALT0_VENDOR := TP-Link
+  DEVICE_ALT0_MODEL := TL-R605
+  DEVICE_ALT0_VARIANT := v1
+  DEVICE_PACKAGES := -wpad-basic-mbedtls -uboot-envtools
+  IMAGE_SIZE := 13760k
+endef
+TARGET_DEVICES += tplink_er605-v1
+
 define Device/tplink_er605-v2
   $(Device/nand)
   DEVICE_COMPAT_VERSION := 1.2
@@ -3047,7 +3075,7 @@ define Device/tplink_er605-v2
   DEVICE_ALT0_VENDOR := TP-Link
   DEVICE_ALT0_MODEL := FR205
   DEVICE_ALT0_VARIANT := v1
-  DEVICE_PACKAGES := -wpad-basic-mbedtls kmod-usb3 -uboot-envtools
+  DEVICE_PACKAGES := -wpad-openssl kmod-usb3 -uboot-envtools
   KERNEL_IN_UBI := 1
   KERNEL_LOADADDR := 0x82000000
   KERNEL := kernel-bin | relocate-kernel $(loadaddr-y) | lzma | \
@@ -3167,7 +3195,7 @@ define Device/ubnt_edgerouter_common
   FILESYSTEMS := squashfs
   KERNEL_SIZE := 6144k
   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
-  DEVICE_PACKAGES += -wpad-basic-mbedtls -uboot-envtools
+  DEVICE_PACKAGES += -wpad-openssl -uboot-envtools
   DEVICE_COMPAT_VERSION := 2.0
   DEVICE_COMPAT_MESSAGE :=  Partition table has been changed due to kernel size restrictions. \
     Refer to the wiki page for instructions to migrate to the new layout: \
@@ -3256,7 +3284,7 @@ define Device/unielec_u7621-06-16m
   DEVICE_MODEL := U7621-06
   DEVICE_VARIANT := 16M
   DEVICE_PACKAGES := kmod-ata-ahci kmod-mmc-mtk kmod-usb3 \
-	-wpad-basic-mbedtls -uboot-envtools
+	-wpad-openssl -uboot-envtools
   SUPPORTED_DEVICES += u7621-06-256M-16M unielec,u7621-06-256m-16m
 endef
 TARGET_DEVICES += unielec_u7621-06-16m
@@ -3269,7 +3297,7 @@ define Device/unielec_u7621-06-32m
   DEVICE_MODEL := U7621-06
   DEVICE_VARIANT := 32M
   DEVICE_PACKAGES := kmod-ata-ahci kmod-mmc-mtk kmod-usb3 \
-	-wpad-basic-mbedtls -uboot-envtools
+	-wpad-openssl -uboot-envtools
   SUPPORTED_DEVICES += unielec,u7621-06-32m
 endef
 TARGET_DEVICES += unielec_u7621-06-32m
@@ -3282,7 +3310,7 @@ define Device/unielec_u7621-06-64m
   DEVICE_MODEL := U7621-06
   DEVICE_VARIANT := 64M
   DEVICE_PACKAGES := kmod-ata-ahci kmod-mmc-mtk kmod-usb3 \
-	-wpad-basic-mbedtls -uboot-envtools
+	-wpad-openssl -uboot-envtools
   SUPPORTED_DEVICES += unielec,u7621-06-512m-64m
 endef
 TARGET_DEVICES += unielec_u7621-06-64m
@@ -3540,7 +3568,7 @@ define Device/xiaoyu_xy-c5
   IMAGE_SIZE := 32448k
   DEVICE_VENDOR := XiaoYu
   DEVICE_MODEL := XY-C5
-  DEVICE_PACKAGES := kmod-ata-ahci kmod-usb3 -wpad-basic-mbedtls \
+  DEVICE_PACKAGES := kmod-ata-ahci kmod-usb3 -wpad-openssl \
 	-uboot-envtools
 endef
 TARGET_DEVICES += xiaoyu_xy-c5
@@ -3551,7 +3579,7 @@ define Device/xzwifi_creativebox-v1
   DEVICE_VENDOR := CreativeBox
   DEVICE_MODEL := v1
   DEVICE_PACKAGES := kmod-ata-ahci kmod-mt7603 kmod-mt76x2 kmod-mmc-mtk \
-	kmod-usb3 -wpad-basic-mbedtls -uboot-envtools
+	kmod-usb3 -wpad-openssl -uboot-envtools
 endef
 TARGET_DEVICES += xzwifi_creativebox-v1
 
@@ -3775,6 +3803,22 @@ define Device/zio_freezio
 	kmod-usb-ledtrig-usbport -uboot-envtools
 endef
 TARGET_DEVICES += zio_freezio
+
+define Device/zte_e8820s
+  $(Device/nand)
+  $(Device/uimage-lzma-loader)
+  DEVICE_VENDOR := ZTE
+  DEVICE_MODEL := E8820S
+  DEVICE_PACKAGES := kmod-mt7603 kmod-mt76x2 kmod-usb3 \
+	kmod-usb-ledtrig-usbport automount
+  DEVICE_COMPAT_VERSION := 2.0
+  DEVICE_COMPAT_MESSAGE := Partition table has changed to fit the new U-Boot
+  IMAGE_SIZE := 121728k
+  IMAGES += factory.bin
+  IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | \
+	check-size
+endef
+TARGET_DEVICES += zte_e8820s
 
 define Device/zyxel_lte3301-plus
   $(Device/nand)
